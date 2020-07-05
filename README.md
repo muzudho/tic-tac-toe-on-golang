@@ -15,7 +15,7 @@
 During development, you may need to reproduce the behavior of your computer.  
 It is difficult to compare the behavior. Instead, it is useful to get the logs and compare the logs.  
 
-* [x] 'log.go' (You can code in 10 minutes)
+* [x] 'log.go' (You can code in 30 minutes)
   * [x] Writeln - Write to a file.
   * [x] Clear - Log to empty.
   * [x] Println - Write and display.

@@ -20,4 +20,7 @@ func main() {
 	pos := newPosition()
 	log.println(pos.pos())
 	log.println(position_result(Win, Nought))
+
+	search := newSearch(pos.friend, pos.pieces_num, true)
+	log.println(fmt.Sprintf("pv=|%s|", search.pv(pos)))
 }

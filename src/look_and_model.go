@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+	"time"
+)
 
 // 駒とか、石とかのことだが、〇×は 何なんだろうな、マーク☆（＾～＾）？
 type Piece int
@@ -123,43 +127,43 @@ func position_result(result GameResult, winner Piece) string {
 	}
 }
 
-/*
- */
-
-/*
-/// 探索部☆（＾～＾）
-pub struct Search {
-    /// この探索を始めたのはどっち側か☆（＾～＾）
-    pub start_friend: Piece,
-    /// この探索を始めたときに石はいくつ置いてあったか☆（＾～＾）
-    pub start_pieces_num: usize,
-    /// 探索した状態ノード数☆（＾～＾）
-    pub nodes: u32,
-    /// この構造体を生成した時点からストップ・ウォッチを開始するぜ☆（＾～＾）
-    pub stopwatch: Instant,
-    /// info の出力の有無。
-    pub info_enable: bool,
+type Search struct {
+	/// 探索部☆（＾～＾）
+	/// この探索を始めたのはどっち側か☆（＾～＾）
+	start_friend Piece
+	/// この探索を始めたときに石はいくつ置いてあったか☆（＾～＾）
+	start_pieces_num uint8
+	/// 探索した状態ノード数☆（＾～＾）
+	nodes uint32
+	/// この構造体を生成した時点からストップ・ウォッチを開始するぜ☆（＾～＾）
+	stopwatch time.Time
+	/// info の出力の有無。
+	info_enable bool
 }
-impl Search {
-    /// 初期値だぜ☆（＾～＾）
-    pub fn new(friend: Piece, start_pieces_num: usize, info_enable: bool) -> Self {
-        Search {
-            start_friend: friend,
-            start_pieces_num: start_pieces_num,
-            nodes: 0,
-            stopwatch: Instant::now(),
-            info_enable: info_enable,
-        }
-    }
 
-    /// Principal variation. 今読んでる読み筋☆（＾～＾）
-    pub fn pv(&self, pos: &mut Position) -> String {
-        let mut pv = String::new();
-        for t in self.start_pieces_num..pos.pieces_num {
-            pv.push_str(&format!("{} ", pos.history[t]));
-        }
-        pv.trim_end().to_string()
-    }
+// 初期値だぜ☆（＾～＾）
+func newSearch(friend Piece, start_pieces_num uint8, info_enable bool) *Search {
+	p := Search{
+		start_friend:     friend,
+		start_pieces_num: start_pieces_num,
+		nodes:            0,
+		stopwatch:        time.Now(),
+		info_enable:      info_enable,
+	}
+	return &p
+}
+
+// Principal variation. 今読んでる読み筋☆（＾～＾）
+func (self *Search) pv(pos *Position) string {
+	pv := ""
+	for i := self.start_pieces_num; i < pos.pieces_num; i++ {
+		pv += fmt.Sprintf("%d ", pos.history[i])
+	}
+	return strings.TrimRight(pv, "")
+}
+
+/*
+impl Search {
 
     pub fn info_header(pos: &mut Position) {
         match pos.friend {
