@@ -11,14 +11,14 @@ destination = 'C:/Users/むずでょ/Documents/GitHub/tic-tac-toe-on-golang'
 
 def go():
     print('Trace   | Remove.')
-    remove_destination_dir('/main')
+    remove_destination_dir('/src')
     remove_destination_file('/.gitignore')
     remove_destination_file('/copy-to-git.py')
     remove_destination_file('/LICENSE')
     remove_destination_file('/README.md')
 
     print('Trace   | Copy.')
-    copy_dir('/main', ignore=shutil.ignore_patterns('__pycache__'))
+    copy_dir('/src', ignore=shutil.ignore_patterns('__pycache__'))
     copy_file('/.gitignore')
     copy_file('/copy-to-git.py')
     copy_file('/LICENSE')
