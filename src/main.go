@@ -13,8 +13,10 @@ func main() {
 
 	log.println(fmt.Sprintf("Nought=|%s|", Nought))
 	log.println(fmt.Sprintf("Cross =|%s|", Cross))
-
 	log.println(fmt.Sprintf("Win =|%s|", Win))
 	log.println(fmt.Sprintf("Draw=|%s|", Draw))
 	log.println(fmt.Sprintf("Lose=|%s|", Lose))
+
+	pos := newPosition()
+	log.println(pos.pos())
 }

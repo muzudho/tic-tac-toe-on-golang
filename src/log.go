@@ -10,8 +10,8 @@ type log struct {
 }
 
 func newLog(file string) *log {
-	l := log{file: file}
-	return &l
+	p := log{file: file}
+	return &p
 }
 
 func (self *log) writeln(contents string) {

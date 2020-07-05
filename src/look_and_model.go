@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 // 駒とか、石とかのことだが、〇×は 何なんだろうな、マーク☆（＾～＾）？
 type Piece int
 
@@ -40,90 +42,88 @@ const BOARD_LEN uint8 = 10
 // 盤上に置ける最大の駒数だぜ☆（＾～＾） ９マスしか置くとこないから９だぜ☆（＾～＾）
 const SQUARES_NUM uint8 = 9
 
-/*
-/// 局面☆（＾～＾）ゲームデータをセーブしたり、ロードしたりするときの保存されてる現状だぜ☆（＾～＾）
-#[derive(Debug)]
-pub struct Position {
-    /// 次に盤に置く駒☆（＾～＾）
-    /// 英語では 手番は your turn, 相手版は your opponent's turn なんで 手番という英語は無い☆（＾～＾）
-    /// 自分という意味の単語はプログラム用語と被りまくるんで、
-    /// あまり被らない 味方(friend) を手番の意味で たまたま使ってるだけだぜ☆（＾～＾）
-    pub friend: Piece,
+// 局面☆（＾～＾）ゲームデータをセーブしたり、ロードしたりするときの保存されてる現状だぜ☆（＾～＾）
+type Position struct {
+	// 次に盤に置く駒☆（＾～＾）
+	// 英語では 手番は your turn, 相手版は your opponent's turn なんで 手番という英語は無い☆（＾～＾）
+	// 自分という意味の単語はプログラム用語と被りまくるんで、
+	// あまり被らない 味方(friend) を手番の意味で たまたま使ってるだけだぜ☆（＾～＾）
+	friend Piece
 
-    /// 開始局面の盤の各マス☆（＾～＾） [0] は未使用☆（＾～＾）
-    pub starting_board: [Option<Piece>; BOARD_LEN],
-    /// 盤の上に最初から駒が何個置いてあったかだぜ☆（＾～＾）
-    pub starting_pieces_num: usize,
+	// 開始局面の盤の各マス☆（＾～＾） [0] は未使用☆（＾～＾）
+	starting_board [BOARD_LEN]*Piece
+	// 盤の上に最初から駒が何個置いてあったかだぜ☆（＾～＾）
+	starting_pieces_num uint8
 
-    /// 現状の盤の各マス☆（＾～＾） [0] は未使用☆（＾～＾）
-    pub board: [Option<Piece>; BOARD_LEN],
+	// 現状の盤の各マス☆（＾～＾） [0] は未使用☆（＾～＾）
+	board [BOARD_LEN]*Piece
 
-    /// 棋譜だぜ☆（＾～＾）駒を置いた番地を並べてけだぜ☆（＾～＾）
-    pub history: [u8; SQUARES_NUM],
+	// 棋譜だぜ☆（＾～＾）駒を置いた番地を並べてけだぜ☆（＾～＾）
+	history [SQUARES_NUM]uint8
 
-    /// 盤の上に駒が何個置いてあるかだぜ☆（＾～＾）
-    pub pieces_num: usize,
+	// 盤の上に駒が何個置いてあるかだぜ☆（＾～＾）
+	pieces_num uint8
 }
-impl Default for Position {
-    fn default() -> Self {
-        Position {
-            friend: Piece::Nought,
-            starting_board: [None; BOARD_LEN],
-            starting_pieces_num: 0,
-            board: [None; BOARD_LEN],
-            history: [0; SQUARES_NUM],
-            pieces_num: 0,
-        }
-    }
+
+func newPosition() *Position {
+	p := Position{
+		friend:              Nought,
+		starting_board:      [...]*Piece{nil, nil, nil, nil, nil, nil, nil, nil, nil, nil},
+		starting_pieces_num: 0,
+		board:               [...]*Piece{nil, nil, nil, nil, nil, nil, nil, nil, nil, nil},
+		history:             [SQUARES_NUM]uint8{0},
+		pieces_num:          0,
+	}
+	return &p
 }
-impl Position {
-    fn cell(&self, index: usize) -> String {
-        if let Some(piece) = self.board[index] {
-            format!(" {} ", piece)
-        } else {
-            "   ".to_string()
-        }
-    }
-    pub fn pos(&self) -> String {
-        let s = &mut format!(
-            "[Next {} move(s) | Go {}]
-",
-            self.pieces_num + 1,
-            self.friend
-        );
-        // 書式指定子は cell関数の方に任せるぜ☆（＾～＾）
-        s.push_str(&format!(
-            "\
+
+func (self *Position) cell(index uint8) string {
+	if self.board[index] != nil {
+		return fmt.Sprintf(" %s ", self.board[index])
+	} else {
+		return "   "
+	}
+}
+
+func (self *Position) pos() string {
+	s := fmt.Sprintf(
+		`[Next %d move(s) | Go %s]
+`,
+		self.pieces_num+1,
+		self.friend)
+	// 書式指定子は cell関数の方に任せるぜ☆（＾～＾）
+	s += fmt.Sprintf(`
 +---+---+---+
-|{0}|{1}|{2}| マスを選んでください。例 `do 7`
+|%1s|%1s|%1s| マスを選んでください。例 'do 7'
 +---+---+---+
-|{3}|{4}|{5}|    7 8 9
+|%1s|%1s|%1s|    7 8 9
 +---+---+---+    4 5 6
-|{6}|{7}|{8}|    1 2 3
+|%1s|%1s|%1s|    1 2 3
 +---+---+---+
-",
-            self.cell(7),
-            self.cell(8),
-            self.cell(9),
-            self.cell(4),
-            self.cell(5),
-            self.cell(6),
-            self.cell(1),
-            self.cell(2),
-            self.cell(3)
-        ));
-        s.to_string()
-    }
+`,
+		self.cell(7),
+		self.cell(8),
+		self.cell(9),
+		self.cell(4),
+		self.cell(5),
+		self.cell(6),
+		self.cell(1),
+		self.cell(2),
+		self.cell(3))
+	return s
+}
 
-    pub fn print_result(&self) {
+/*
+    func (self *Position) print_result() {
         if self.is_opponent_win() {
             Log::println(&format!("win {}", self.opponent()));
         } else if self.is_draw() {
             Log::println(&format!("draw"));
         }
-    }
-}
+	}
+*/
 
+/*
 /// 探索部☆（＾～＾）
 pub struct Search {
     /// この探索を始めたのはどっち側か☆（＾～＾）

@@ -24,8 +24,8 @@ The first thing you have to create is your motive.
 It is important to start with the appearance.  
 
 * [ ] 'look_and_model.go' (You can code in 4 hours)
-  * [ ] Piece - "O", "X".
-  * [ ] Game result - Win/Draw/Lose.
+  * [x] Piece - "O", "X".
+  * [x] Game result - Win/Draw/Lose.
   * [ ] Position - It's the board.
   * [ ] Search - Computer player search info.
 
