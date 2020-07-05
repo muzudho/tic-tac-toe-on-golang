@@ -18,7 +18,7 @@ def go():
     remove_destination_file('/README.md')
 
     print('Trace   | Copy.')
-    copy_dir('/src', ignore=shutil.ignore_patterns('__pycache__'))
+    copy_dir('/src', ignore=shutil.ignore_patterns('*.log'))
     copy_file('/.gitignore')
     copy_file('/copy-to-git.py')
     copy_file('/LICENSE')
