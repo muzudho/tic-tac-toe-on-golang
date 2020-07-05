@@ -19,4 +19,5 @@ func main() {
 
 	pos := newPosition()
 	log.println(pos.pos())
+	log.println(position_result(Win, Nought))
 }

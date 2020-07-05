@@ -113,15 +113,18 @@ func (self *Position) pos() string {
 	return s
 }
 
-/*
-    func (self *Position) print_result() {
-        if self.is_opponent_win() {
-            Log::println(&format!("win {}", self.opponent()));
-        } else if self.is_draw() {
-            Log::println(&format!("draw"));
-        }
+func position_result(result GameResult, winner Piece) string {
+	if result == Win {
+		return fmt.Sprintf("win %s", winner)
+	} else if result == Draw {
+		return "draw"
+	} else {
+		return ""
 	}
-*/
+}
+
+/*
+ */
 
 /*
 /// 探索部☆（＾～＾）

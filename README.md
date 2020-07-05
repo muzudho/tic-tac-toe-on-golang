@@ -26,7 +26,7 @@ It is important to start with the appearance.
 * [ ] 'look_and_model.go' (You can code in 4 hours)
   * [x] Piece - "O", "X".
   * [x] Game result - Win/Draw/Lose.
-  * [ ] Position - It's the board.
+  * [x] Position - It's the board.
   * [ ] Search - Computer player search info.
 
 If you want to play immediately, you have the talent of a game creator.  
