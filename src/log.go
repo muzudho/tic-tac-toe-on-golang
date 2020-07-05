@@ -5,8 +5,17 @@ import (
 	"os"
 )
 
-func Writeln(contents string) {
-	f, err := os.OpenFile("test.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+type log struct {
+	file string
+}
+
+func newLog(file string) *log {
+	l := log{file: file}
+	return &l
+}
+
+func (self *log) writeln(contents string) {
+	f, err := os.OpenFile(self.file, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		// ファイルの作成に失敗しても、続行優先で無視しようぜ☆（＾～＾）
 		// 大会で 標準入力にエラーメッセージを出すと、大会サーバーへ不要なメッセージを送信することがあるからな☆（＾～＾）
@@ -22,8 +31,8 @@ func Writeln(contents string) {
 	}
 }
 
-func Clear() {
-	f, err := os.Create("test.log")
+func (self *log) clear() {
+	f, err := os.Create(self.file)
 	if err != nil {
 		// ファイルの作成に失敗しても、続行優先で無視しようぜ☆（＾～＾）
 		// 大会で 標準入力にエラーメッセージを出すと、大会サーバーへ不要なメッセージを送信することがあるからな☆（＾～＾）
@@ -39,7 +48,7 @@ func Clear() {
 	}
 }
 
-func Println(contents string) {
+func (self *log) println(contents string) {
 	fmt.Println(contents)
-	Writeln(contents)
+	self.writeln(contents)
 }
