@@ -162,48 +162,54 @@ func (self *Search) pv(pos *Position) string {
 	return strings.TrimRight(pv, "")
 }
 
+func search_info_header(pos *Position) string {
+	switch pos.friend {
+	case Nought:
+		return "info nps ...... nodes ...... pv O X O X O X O X O"
+	case Cross:
+		return "info nps ...... nodes ...... pv X O X O X O X O X"
+	default:
+		panic(fmt.Sprintf("Invalid friend=|%s|", pos.friend))
+	}
+}
+
+/// 前向き探索中だぜ☆（＾～＾）
+func (self *Search) info_forward(nps uint64, pos *Position, addr uint8, comment string) string {
+	var friend_str string
+	if pos.friend == self.start_friend {
+		friend_str = "+"
+	} else {
+		friend_str = "-"
+	}
+
+	var height string
+	if SQUARES_NUM < pos.pieces_num+1 {
+		height = "none    "
+	} else {
+		height = fmt.Sprintf("height %d", pos.pieces_num+1)
+	}
+
+	var comment_str string
+	if comment != "" {
+		comment_str = fmt.Sprintf(" %s \"%s\"", friend_str, comment)
+	} else {
+		comment_str = ""
+	}
+
+	return fmt.Sprintf("info nps %6d nodes %6d pv %-17s | %s [%d] | ->   to %s |       |      |%s",
+		nps,
+		self.nodes,
+		self.pv(pos),
+		friend_str,
+		addr,
+		height,
+		comment_str)
+}
+
 /*
 impl Search {
 
-    pub fn info_header(pos: &mut Position) {
-        match pos.friend {
-            Piece::Nought => {
-                Log::println("info nps ...... nodes ...... pv O X O X O X O X O");
-            }
-            Piece::Cross => {
-                Log::println(&format!(
-                    "info nps ...... nodes ...... pv X O X O X O X O X"
-                ));
-            }
-        }
-    }
 
-    /// 前向き探索中だぜ☆（＾～＾）
-    pub fn info_forward(&self, pos: &mut Position, addr: usize, comment: Option<String>) {
-        let friend_str = if pos.friend == self.start_friend {
-            "+".to_string()
-        } else {
-            "-".to_string()
-        };
-        Log::println(&format!(
-            "info nps {: >6} nodes {: >6} pv {: <17} | {} [{}] | ->   to {} |       |      |{}",
-            self.nps(),
-            self.nodes,
-            self.pv(pos),
-            friend_str,
-            addr,
-            if SQUARES_NUM < pos.pieces_num + 1 {
-                "none    ".to_string()
-            } else {
-                format!("height {}", pos.pieces_num + 1)
-            },
-            if let Some(comment) = comment {
-                format!(" {} \"{}\"", friend_str, comment)
-            } else {
-                "".to_string()
-            },
-        ))
-    }
     /// 前向き探索で葉に着いたぜ☆（＾～＾）
     pub fn info_forward_leaf(
         &self,
@@ -211,14 +217,14 @@ impl Search {
         addr: usize,
         result: GameResult,
         comment: Option<String>,
-    ) {
+    ) -> String {
         let friend_str = if pos.friend == self.start_friend {
             "+".to_string()
         } else {
             "-".to_string()
         };
-        Log::println(&format!(
-            "info nps {: >6} nodes {: >6} pv {: <17} | {} [{}] | .       {} |       |{}|{}",
+        format!(
+            "info nps {: >6} nodes {: >6} pv {: <17} | {} [{}] | .       {} |       | {:4} |{}",
             self.nps(),
             self.nodes,
             self.pv(pos),
@@ -229,17 +235,14 @@ impl Search {
             } else {
                 format!("height {}", pos.pieces_num)
             },
-            match result {
-                GameResult::Win => " win  ".to_string(),
-                GameResult::Draw => " draw ".to_string(),
-                GameResult::Lose => " lose ".to_string(),
-            },
+            result.to_string(),
             if let Some(comment) = comment {
                 format!(" {} \"{}\"", friend_str, comment)
             } else {
                 "".to_string()
             },
-        ));
+        )
+        .to_string()
     }
     /// 後ろ向き探索のときの表示だぜ☆（＾～＾）
     pub fn info_backward(
@@ -248,14 +251,14 @@ impl Search {
         addr: usize,
         result: GameResult,
         comment: Option<String>,
-    ) {
+    ) -> String {
         let friend_str = if pos.friend == self.start_friend {
             "+".to_string()
         } else {
             "-".to_string()
         };
-        Log::println(&format!(
-            "info nps {: >6} nodes {: >6} pv {: <17} |       | <- from {} | {} [{}] |{}|{}",
+        return format!(
+            "info nps {: >6} nodes {: >6} pv {: <17} |       | <- from {} | {} [{}] | {:4} |{}",
             self.nps(),
             self.nodes,
             self.pv(pos),
@@ -266,17 +269,14 @@ impl Search {
             },
             friend_str,
             addr,
-            match result {
-                GameResult::Win => " win  ".to_string(),
-                GameResult::Draw => " draw ".to_string(),
-                GameResult::Lose => " lose ".to_string(),
-            },
+            result.to_string(),
             if let Some(comment) = comment {
                 format!(" {} \"{}\"", friend_str, comment)
             } else {
                 "".to_string()
             }
-        ));
+        )
+        .to_string();
     }
 }
 */

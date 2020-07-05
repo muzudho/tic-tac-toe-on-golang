@@ -23,4 +23,11 @@ func main() {
 
 	search := newSearch(pos.friend, pos.pieces_num, true)
 	log.println(fmt.Sprintf("pv=|%s|", search.pv(pos)))
+	// 適当な内容を入れて、入れ物として、入れた中身を見せてくれるか、チェックしろだぜ☆（＾～＾）
+	log.println(search_info_header(pos))
+	log.println(search.info_forward(1234, pos, 1, "Hello!"))
+	/*
+		    log.println(&search.info_forward_leaf(search.nps(), &pos, 1, GameResult::Win, Some("Hello!")));
+			log.println(&search.info_backward(search.nps(), &pos, 1, GameResult::Win, Some("Hello!")));
+	*/
 }
