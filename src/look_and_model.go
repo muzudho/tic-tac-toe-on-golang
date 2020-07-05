@@ -15,23 +15,32 @@ var pieces = [...]string{
 	"x",
 }
 
-func (num Piece) String() string { return pieces[num-1] }
+func (self Piece) String() string { return pieces[self-1] }
 
-/*
-/// 〇×ゲームは完全解析できるから、評価ではなくて、ゲームの結果が分かるんだよな☆（＾～＾）
-#[derive(Debug)]
-pub enum GameResult {
-    Win,
-    Draw,
-    Lose,
+// 〇×ゲームは完全解析できるから、評価ではなくて、ゲームの結果が分かるんだよな☆（＾～＾）
+type GameResult int
+
+const (
+	Win GameResult = 1 + iota
+	Draw
+	Lose
+)
+
+var game_results = [...]string{
+	"win",
+	"draw",
+	"lose",
 }
 
-/// 1スタートで9まで☆（＾～＾） 配列には0番地もあるから、要素数は10だぜ☆（＾～＾）
-pub const BOARD_LEN: usize = 10;
+func (self GameResult) String() string { return game_results[self-1] }
 
-/// 盤上に置ける最大の駒数だぜ☆（＾～＾） ９マスしか置くとこないから９だぜ☆（＾～＾）
-pub const SQUARES_NUM: usize = 9;
+// 1スタートで9まで☆（＾～＾） 配列には0番地もあるから、要素数は10だぜ☆（＾～＾）
+const BOARD_LEN uint8 = 10
 
+// 盤上に置ける最大の駒数だぜ☆（＾～＾） ９マスしか置くとこないから９だぜ☆（＾～＾）
+const SQUARES_NUM uint8 = 9
+
+/*
 /// 局面☆（＾～＾）ゲームデータをセーブしたり、ロードしたりするときの保存されてる現状だぜ☆（＾～＾）
 #[derive(Debug)]
 pub struct Position {
