@@ -5,6 +5,11 @@
 * [Python ver](https://github.com/muzudho/tic-tac-toe-on-python)
 * [Rust ver](https://github.com/muzudho/tic-tac-toe)
 
+## Kitting
+
+[Downloads](https://golang.org/dl/)
+[VSCodeでGo言語の開発環境を構築する](https://qiita.com/melty_go/items/c977ba594efcffc8b567)
+
 ## How to make tic tac toe?
 
 During development, you may need to reproduce the behavior of your computer.  
