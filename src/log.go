@@ -38,3 +38,8 @@ func Clear() {
 		return
 	}
 }
+
+func Println(contents string) {
+	fmt.Println(contents)
+	Writeln(contents)
+}
