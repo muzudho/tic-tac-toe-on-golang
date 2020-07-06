@@ -11,9 +11,9 @@ type Piece int
 
 const (
 	// 〇
-	Nought Piece = 1 + iota
+	Piece_Nought Piece = 1 + iota
 	// ×
-	Cross
+	Piece_Cross
 )
 
 var pieces = [...]string{
@@ -27,9 +27,9 @@ func (self Piece) String() string { return pieces[self-1] }
 type GameResult int
 
 const (
-	Win GameResult = 1 + iota
-	Draw
-	Lose
+	GameResult_Win GameResult = 1 + iota
+	GameResult_Draw
+	GameResult_Lose
 )
 
 var game_results = [...]string{
@@ -71,7 +71,7 @@ type Position struct {
 
 func newPosition() *Position {
 	p := Position{
-		friend:              Nought,
+		friend:              Piece_Nought,
 		starting_board:      [...]*Piece{nil, nil, nil, nil, nil, nil, nil, nil, nil, nil},
 		starting_pieces_num: 0,
 		board:               [...]*Piece{nil, nil, nil, nil, nil, nil, nil, nil, nil, nil},
@@ -118,9 +118,9 @@ func (self *Position) pos() string {
 }
 
 func position_result(result GameResult, winner Piece) string {
-	if result == Win {
+	if result == GameResult_Win {
 		return fmt.Sprintf("win %s", winner)
-	} else if result == Draw {
+	} else if result == GameResult_Draw {
 		return "draw"
 	} else {
 		return ""
@@ -162,18 +162,19 @@ func (self *Search) pv(pos *Position) string {
 	return strings.TrimRight(pv, "")
 }
 
+// 見出しだぜ☆（＾～＾）
 func search_info_header(pos *Position) string {
 	switch pos.friend {
-	case Nought:
+	case Piece_Nought:
 		return "info nps ...... nodes ...... pv O X O X O X O X O"
-	case Cross:
+	case Piece_Cross:
 		return "info nps ...... nodes ...... pv X O X O X O X O X"
 	default:
 		panic(fmt.Sprintf("Invalid friend=|%s|", pos.friend))
 	}
 }
 
-/// 前向き探索中だぜ☆（＾～＾）
+// 前向き探索中だぜ☆（＾～＾）
 func (self *Search) info_forward(nps uint64, pos *Position, addr uint8, comment string) string {
 	var friend_str string
 	if pos.friend == self.start_friend {
@@ -206,77 +207,85 @@ func (self *Search) info_forward(nps uint64, pos *Position, addr uint8, comment 
 		comment_str)
 }
 
-/*
-impl Search {
+// 前向き探索で葉に着いたぜ☆（＾～＾）
+func (self *Search) info_forward_leaf(
+	nps uint64,
+	pos *Position,
+	addr uint8,
+	result GameResult,
+	comment string,
+) string {
+	var friend_str string
+	if pos.friend == self.start_friend {
+		friend_str = "+"
+	} else {
+		friend_str = "-"
+	}
 
+	var height string
+	if SQUARES_NUM < pos.pieces_num {
+		height = "none    "
+	} else {
+		height = fmt.Sprintf("height %d", pos.pieces_num)
+	}
 
-    /// 前向き探索で葉に着いたぜ☆（＾～＾）
-    pub fn info_forward_leaf(
-        &self,
-        pos: &mut Position,
-        addr: usize,
-        result: GameResult,
-        comment: Option<String>,
-    ) -> String {
-        let friend_str = if pos.friend == self.start_friend {
-            "+".to_string()
-        } else {
-            "-".to_string()
-        };
-        format!(
-            "info nps {: >6} nodes {: >6} pv {: <17} | {} [{}] | .       {} |       | {:4} |{}",
-            self.nps(),
-            self.nodes,
-            self.pv(pos),
-            friend_str,
-            addr,
-            if SQUARES_NUM < pos.pieces_num {
-                "none    ".to_string()
-            } else {
-                format!("height {}", pos.pieces_num)
-            },
-            result.to_string(),
-            if let Some(comment) = comment {
-                format!(" {} \"{}\"", friend_str, comment)
-            } else {
-                "".to_string()
-            },
-        )
-        .to_string()
-    }
-    /// 後ろ向き探索のときの表示だぜ☆（＾～＾）
-    pub fn info_backward(
-        &self,
-        pos: &mut Position,
-        addr: usize,
-        result: GameResult,
-        comment: Option<String>,
-    ) -> String {
-        let friend_str = if pos.friend == self.start_friend {
-            "+".to_string()
-        } else {
-            "-".to_string()
-        };
-        return format!(
-            "info nps {: >6} nodes {: >6} pv {: <17} |       | <- from {} | {} [{}] | {:4} |{}",
-            self.nps(),
-            self.nodes,
-            self.pv(pos),
-            if SQUARES_NUM < pos.pieces_num + 1 {
-                "none    ".to_string()
-            } else {
-                format!("height {}", pos.pieces_num + 1)
-            },
-            friend_str,
-            addr,
-            result.to_string(),
-            if let Some(comment) = comment {
-                format!(" {} \"{}\"", friend_str, comment)
-            } else {
-                "".to_string()
-            }
-        )
-        .to_string();
-    }
+	var comment_str string
+	if comment != "" {
+		comment_str = fmt.Sprintf(" %s \"%s\"", friend_str, comment)
+	} else {
+		comment_str = ""
+	}
+
+	return fmt.Sprintf(
+		"info nps %6d nodes %6d pv %-17s | %s [%d] | .       %s |       | %4s |%s",
+		nps,
+		self.nodes,
+		self.pv(pos),
+		friend_str,
+		addr,
+		height,
+		result,
+		comment_str,
+	)
 }
-*/
+
+// 後ろ向き探索のときの表示だぜ☆（＾～＾）
+func (self *Search) info_backward(
+	nps uint64,
+	pos *Position,
+	addr uint8,
+	result GameResult,
+	comment string,
+) string {
+	var friend_str string
+	if pos.friend == self.start_friend {
+		friend_str = "+"
+	} else {
+		friend_str = "-"
+	}
+
+	var height string
+	if SQUARES_NUM < pos.pieces_num+1 {
+		height = "none    "
+	} else {
+		height = fmt.Sprintf("height %d", pos.pieces_num+1)
+	}
+
+	var comment_str string
+	if comment != "" {
+		comment_str = fmt.Sprintf(" %s \"%s\"", friend_str, comment)
+	} else {
+		comment_str = ""
+	}
+
+	return fmt.Sprintf(
+		"info nps %6d nodes %6d pv %-17s |       | <- from %s | %s [%d] | %4s |%s",
+		nps,
+		self.nodes,
+		self.pv(pos),
+		height,
+		friend_str,
+		addr,
+		result,
+		comment_str)
+}

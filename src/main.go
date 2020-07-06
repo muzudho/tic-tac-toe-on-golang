@@ -11,23 +11,21 @@ func main() {
 	log.writeln("狂った街、東京！！")
 	log.println("おはようさん、世界！！")
 
-	log.println(fmt.Sprintf("Nought=|%s|", Nought))
-	log.println(fmt.Sprintf("Cross =|%s|", Cross))
-	log.println(fmt.Sprintf("Win =|%s|", Win))
-	log.println(fmt.Sprintf("Draw=|%s|", Draw))
-	log.println(fmt.Sprintf("Lose=|%s|", Lose))
+	log.println(fmt.Sprintf("Nought=|%s|", Piece_Nought))
+	log.println(fmt.Sprintf("Cross =|%s|", Piece_Cross))
+	log.println(fmt.Sprintf("Win =|%s|", GameResult_Win))
+	log.println(fmt.Sprintf("Draw=|%s|", GameResult_Draw))
+	log.println(fmt.Sprintf("Lose=|%s|", GameResult_Lose))
 
 	pos := newPosition()
 	log.println(pos.pos())
-	log.println(position_result(Win, Nought))
+	log.println(position_result(GameResult_Win, Piece_Nought))
 
 	search := newSearch(pos.friend, pos.pieces_num, true)
 	log.println(fmt.Sprintf("pv=|%s|", search.pv(pos)))
 	// 適当な内容を入れて、入れ物として、入れた中身を見せてくれるか、チェックしろだぜ☆（＾～＾）
 	log.println(search_info_header(pos))
-	log.println(search.info_forward(1234, pos, 1, "Hello!"))
-	/*
-		    log.println(&search.info_forward_leaf(search.nps(), &pos, 1, GameResult::Win, Some("Hello!")));
-			log.println(&search.info_backward(search.nps(), &pos, 1, GameResult::Win, Some("Hello!")));
-	*/
+	log.println(search.info_forward(123, pos, 1, "Hello!"))
+	log.println(search.info_forward_leaf(456, pos, 1, GameResult_Win, "Hello!"))
+	log.println(search.info_backward(789, pos, 1, GameResult_Win, "Hello!"))
 }
