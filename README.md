@@ -7,8 +7,32 @@
 
 ## Kitting
 
+Golang は Visual Studio Code に向いてないからな☆ｍ９（＾～＾） 他の適当なターミナルで実行しろだぜ☆（＾～＾）  
+
 [Downloads](https://golang.org/dl/)
 [VSCodeでGo言語の開発環境を構築する](https://qiita.com/melty_go/items/c977ba594efcffc8b567)
+
+## Run
+
+ソース・ファイルが１つのときは、  
+
+Input:  
+
+```shell
+go run main.go
+```
+
+でいいんだが、複数あるときは、ビルドすると ディレクトリの名前で実行ファイルが作られるから、その実行ファイルの名前を叩けだぜ☆（＾～＾）  
+
+Input:  
+
+```shell
+go build
+src
+```
+
+参考:  
+[Go言語で同じディレクトリ内の関数呼び出すのにエラーがでる（#command-line-arguments ./main.go: undefined: funcName）](https://qiita.com/kosukeKK/items/abb208fd0bbd3744ddfb)
 
 ## How to make tic tac toe?
 

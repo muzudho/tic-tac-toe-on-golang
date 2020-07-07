@@ -1,9 +1,7 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 	"unicode/utf8"
 )
 
@@ -17,16 +15,8 @@ type CommandLineParser struct {
 // 末尾の改行を除こうぜ☆（＾～＾）
 // trim すると空白も消えるぜ☆（＾～＾）
 func newCommandLineParser(line string) *CommandLineParser {
-	var s string
-	print("スキャンするぜ☆（＾～＾）")
-	var scanner = bufio.NewScanner(os.Stdin)
-	if scanner.Scan() {
-		print("スキャンしたか☆（＾～＾）？")
-		s = scanner.Text()
-	}
-	print("どうだぜ☆（＾～＾）？")
 	// 文字数を調べようぜ☆（＾～＾）
-	len := utf8.RuneCountInString(s)
+	len := utf8.RuneCountInString(line)
 	return &CommandLineParser{
 		line:   line,
 		len:    len,

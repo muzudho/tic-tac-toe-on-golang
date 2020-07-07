@@ -1,6 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"unicode/utf8"
+)
 
 func main() {
 	// しょっぱなにプログラムが壊れてないかテストしているぜ☆（＾～＾）
@@ -89,4 +94,16 @@ func main() {
 	// p.starts=|5|
 	log.println(fmt.Sprintf("p.rest  =|%s|", p.rest()))
 	// p.rest  =| the Moon!|
+
+	// TODO 標準入力の練習☆（＾～＾）
+	var s string
+	print("スキャンするぜ☆（＾～＾）")
+	var scanner = bufio.NewScanner(os.Stdin)
+	if scanner.Scan() {
+		print("スキャンしたか☆（＾～＾）？")
+		s = scanner.Text()
+	}
+	print("どうだぜ☆（＾～＾）？")
+	// 文字数を調べようぜ☆（＾～＾）
+	len := utf8.RuneCountInString(s)
 }
