@@ -56,18 +56,18 @@ It is important to start with the appearance.
 If you want to play immediately, you have the talent of a game creator.  
 Being able to control your position means being able to play.  
 
-* [ ] 'position.go' (You can code in 15 minutes)
-  * [ ] doMove
-  * [ ] undoMove
-  * [ ] opponent
+* [x] 'position.go' (You can code in 15 minutes)
+  * [x] doMove
+  * [x] undoMove
+  * [x] opponent
 
 Let's enter commands into the computer. Create a command line parser.  
 
-* [ ] 'command_line_parser.go' (You can code in 40 minutes)
-  * [ ] Input.
-  * [ ] Starts with.
-  * [ ] Go next to.
-  * [ ] Rest.
+* [x] 'command_line_parser.go' (You can code in 40 minutes)
+  * [x] Input.
+  * [x] Starts with.
+  * [x] Go next to.
+  * [x] Rest.
 
 People who are looking for something 10 minutes a day are looking for something for a week in a year.  
 Before creating the game itself, let's first create the replay function. Let's get it for a week.  
