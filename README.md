@@ -33,8 +33,8 @@ If you want to play immediately, you have the talent of a game creator.
 Being able to control your position means being able to play.  
 
 * [ ] 'position.go' (You can code in 15 minutes)
-  * [ ] do_move
-  * [ ] undo_move
+  * [ ] doMove
+  * [ ] undoMove
   * [ ] opponent
 
 Let's enter commands into the computer. Create a command line parser.  

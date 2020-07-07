@@ -6,14 +6,14 @@ import (
 	"time"
 )
 
-// 駒とか、石とかのことだが、〇×は 何なんだろうな、マーク☆（＾～＾）？
+// Piece 駒とか、石とかのことだが、〇×は 何なんだろうな、マーク☆（＾～＾）？
 type Piece int
 
 const (
-	// 〇
-	Piece_Nought Piece = 1 + iota
-	// ×
-	Piece_Cross
+	// PieceNought 〇
+	PieceNought Piece = 1 + iota
+	// PieceCross ×
+	PieceCross
 )
 
 var pieces = [...]string{
@@ -21,32 +21,35 @@ var pieces = [...]string{
 	"x",
 }
 
-func (self Piece) String() string { return pieces[self-1] }
+func (piece Piece) String() string { return pieces[piece-1] }
 
-// 〇×ゲームは完全解析できるから、評価ではなくて、ゲームの結果が分かるんだよな☆（＾～＾）
+// GameResult 〇×ゲームは完全解析できるから、評価ではなくて、ゲームの結果が分かるんだよな☆（＾～＾）
 type GameResult int
 
 const (
-	GameResult_Win GameResult = 1 + iota
-	GameResult_Draw
-	GameResult_Lose
+	// GameResultWin is 勝ち☆（＾～＾）
+	GameResultWin GameResult = 1 + iota
+	// GameResultDraw is 引き分け☆（＾～＾）
+	GameResultDraw
+	// GameResultLose is 負け☆（＾～＾）
+	GameResultLose
 )
 
-var game_results = [...]string{
+var gameResults = [...]string{
 	"win",
 	"draw",
 	"lose",
 }
 
-func (self GameResult) String() string { return game_results[self-1] }
+func (result GameResult) String() string { return gameResults[result-1] }
 
-// 1スタートで9まで☆（＾～＾） 配列には0番地もあるから、要素数は10だぜ☆（＾～＾）
-const BOARD_LEN uint8 = 10
+// BoardLen 1スタートで9まで☆（＾～＾） 配列には0番地もあるから、要素数は10だぜ☆（＾～＾）
+const BoardLen uint8 = 10
 
-// 盤上に置ける最大の駒数だぜ☆（＾～＾） ９マスしか置くとこないから９だぜ☆（＾～＾）
-const SQUARES_NUM uint8 = 9
+// SquaresNum 盤上に置ける最大の駒数だぜ☆（＾～＾） ９マスしか置くとこないから９だぜ☆（＾～＾）
+const SquaresNum uint8 = 9
 
-// 局面☆（＾～＾）ゲームデータをセーブしたり、ロードしたりするときの保存されてる現状だぜ☆（＾～＾）
+// Position 局面☆（＾～＾）ゲームデータをセーブしたり、ロードしたりするときの保存されてる現状だぜ☆（＾～＾）
 type Position struct {
 	// 次に盤に置く駒☆（＾～＾）
 	// 英語では 手番は your turn, 相手版は your opponent's turn なんで 手番という英語は無い☆（＾～＾）
@@ -55,46 +58,45 @@ type Position struct {
 	friend Piece
 
 	// 開始局面の盤の各マス☆（＾～＾） [0] は未使用☆（＾～＾）
-	starting_board [BOARD_LEN]*Piece
+	startingBoard [BoardLen]*Piece
 	// 盤の上に最初から駒が何個置いてあったかだぜ☆（＾～＾）
-	starting_pieces_num uint8
+	startingPiecesNum uint8
 
 	// 現状の盤の各マス☆（＾～＾） [0] は未使用☆（＾～＾）
-	board [BOARD_LEN]*Piece
+	board [BoardLen]*Piece
 
 	// 棋譜だぜ☆（＾～＾）駒を置いた番地を並べてけだぜ☆（＾～＾）
-	history [SQUARES_NUM]uint8
+	history [SquaresNum]uint8
 
 	// 盤の上に駒が何個置いてあるかだぜ☆（＾～＾）
-	pieces_num uint8
+	piecesNum uint8
 }
 
 func newPosition() *Position {
 	p := Position{
-		friend:              Piece_Nought,
-		starting_board:      [...]*Piece{nil, nil, nil, nil, nil, nil, nil, nil, nil, nil},
-		starting_pieces_num: 0,
-		board:               [...]*Piece{nil, nil, nil, nil, nil, nil, nil, nil, nil, nil},
-		history:             [SQUARES_NUM]uint8{0},
-		pieces_num:          0,
+		friend:            PieceNought,
+		startingBoard:     [...]*Piece{nil, nil, nil, nil, nil, nil, nil, nil, nil, nil},
+		startingPiecesNum: 0,
+		board:             [...]*Piece{nil, nil, nil, nil, nil, nil, nil, nil, nil, nil},
+		history:           [SquaresNum]uint8{0},
+		piecesNum:         0,
 	}
 	return &p
 }
 
-func (self *Position) cell(index uint8) string {
-	if self.board[index] != nil {
-		return fmt.Sprintf(" %s ", self.board[index])
-	} else {
-		return "   "
+func (pos *Position) cell(index uint8) string {
+	if pos.board[index] != nil {
+		return fmt.Sprintf(" %s ", pos.board[index])
 	}
+	return "   "
 }
 
-func (self *Position) pos() string {
+func (pos *Position) pos() string {
 	s := fmt.Sprintf(
 		`[Next %d move(s) | Go %s]
 `,
-		self.pieces_num+1,
-		self.friend)
+		pos.piecesNum+1,
+		pos.friend)
 	// 書式指定子は cell関数の方に任せるぜ☆（＾～＾）
 	s += fmt.Sprintf(`
 +---+---+---+
@@ -105,69 +107,70 @@ func (self *Position) pos() string {
 |%1s|%1s|%1s|    1 2 3
 +---+---+---+
 `,
-		self.cell(7),
-		self.cell(8),
-		self.cell(9),
-		self.cell(4),
-		self.cell(5),
-		self.cell(6),
-		self.cell(1),
-		self.cell(2),
-		self.cell(3))
+		pos.cell(7),
+		pos.cell(8),
+		pos.cell(9),
+		pos.cell(4),
+		pos.cell(5),
+		pos.cell(6),
+		pos.cell(1),
+		pos.cell(2),
+		pos.cell(3))
 	return s
 }
 
-func position_result(result GameResult, winner Piece) string {
-	if result == GameResult_Win {
+func positionResult(result GameResult, winner Piece) string {
+	if result == GameResultWin {
 		return fmt.Sprintf("win %s", winner)
-	} else if result == GameResult_Draw {
+	} else if result == GameResultDraw {
 		return "draw"
 	} else {
 		return ""
 	}
 }
 
+// Search は探索部だぜ☆（＾～＾）
 type Search struct {
 	/// 探索部☆（＾～＾）
 	/// この探索を始めたのはどっち側か☆（＾～＾）
-	start_friend Piece
+	startFriend Piece
 	/// この探索を始めたときに石はいくつ置いてあったか☆（＾～＾）
-	start_pieces_num uint8
+	startPiecesNum uint8
 	/// 探索した状態ノード数☆（＾～＾）
 	nodes uint32
 	/// この構造体を生成した時点からストップ・ウォッチを開始するぜ☆（＾～＾）
 	stopwatch time.Time
 	/// info の出力の有無。
-	info_enable bool
+	infoEnable bool
 }
 
 // 初期値だぜ☆（＾～＾）
-func newSearch(friend Piece, start_pieces_num uint8, info_enable bool) *Search {
+func newSearch(friend Piece, startPiecesNum uint8, infoEnable bool) *Search {
 	p := Search{
-		start_friend:     friend,
-		start_pieces_num: start_pieces_num,
-		nodes:            0,
-		stopwatch:        time.Now(),
-		info_enable:      info_enable,
+		startFriend:    friend,
+		startPiecesNum: startPiecesNum,
+		nodes:          0,
+		stopwatch:      time.Now(),
+		infoEnable:     infoEnable,
 	}
 	return &p
 }
 
 // Principal variation. 今読んでる読み筋☆（＾～＾）
-func (self *Search) pv(pos *Position) string {
+func (search *Search) pv(pos *Position) string {
 	pv := ""
-	for i := self.start_pieces_num; i < pos.pieces_num; i++ {
+	for i := search.startPiecesNum; i < pos.piecesNum; i++ {
 		pv += fmt.Sprintf("%d ", pos.history[i])
 	}
 	return strings.TrimRight(pv, "")
 }
 
 // 見出しだぜ☆（＾～＾）
-func search_info_header(pos *Position) string {
+func searchInfoHeader(pos *Position) string {
 	switch pos.friend {
-	case Piece_Nought:
+	case PieceNought:
 		return "info nps ...... nodes ...... pv O X O X O X O X O"
-	case Piece_Cross:
+	case PieceCross:
 		return "info nps ...... nodes ...... pv X O X O X O X O X"
 	default:
 		panic(fmt.Sprintf("Invalid friend=|%s|", pos.friend))
@@ -175,117 +178,117 @@ func search_info_header(pos *Position) string {
 }
 
 // 前向き探索中だぜ☆（＾～＾）
-func (self *Search) info_forward(nps uint64, pos *Position, addr uint8, comment string) string {
-	var friend_str string
-	if pos.friend == self.start_friend {
-		friend_str = "+"
+func (search *Search) infoForward(nps uint64, pos *Position, addr uint8, comment string) string {
+	var friendStr string
+	if pos.friend == search.startFriend {
+		friendStr = "+"
 	} else {
-		friend_str = "-"
+		friendStr = "-"
 	}
 
 	var height string
-	if SQUARES_NUM < pos.pieces_num+1 {
+	if SquaresNum < pos.piecesNum+1 {
 		height = "none    "
 	} else {
-		height = fmt.Sprintf("height %d", pos.pieces_num+1)
+		height = fmt.Sprintf("height %d", pos.piecesNum+1)
 	}
 
-	var comment_str string
+	var commentStr string
 	if comment != "" {
-		comment_str = fmt.Sprintf(" %s \"%s\"", friend_str, comment)
+		commentStr = fmt.Sprintf(" %s \"%s\"", friendStr, comment)
 	} else {
-		comment_str = ""
+		commentStr = ""
 	}
 
 	return fmt.Sprintf("info nps %6d nodes %6d pv %-17s | %s [%d] | ->   to %s |       |      |%s",
 		nps,
-		self.nodes,
-		self.pv(pos),
-		friend_str,
+		search.nodes,
+		search.pv(pos),
+		friendStr,
 		addr,
 		height,
-		comment_str)
+		commentStr)
 }
 
 // 前向き探索で葉に着いたぜ☆（＾～＾）
-func (self *Search) info_forward_leaf(
+func (search *Search) infoForwardLeaf(
 	nps uint64,
 	pos *Position,
 	addr uint8,
 	result GameResult,
 	comment string,
 ) string {
-	var friend_str string
-	if pos.friend == self.start_friend {
-		friend_str = "+"
+	var friendStr string
+	if pos.friend == search.startFriend {
+		friendStr = "+"
 	} else {
-		friend_str = "-"
+		friendStr = "-"
 	}
 
 	var height string
-	if SQUARES_NUM < pos.pieces_num {
+	if SquaresNum < pos.piecesNum {
 		height = "none    "
 	} else {
-		height = fmt.Sprintf("height %d", pos.pieces_num)
+		height = fmt.Sprintf("height %d", pos.piecesNum)
 	}
 
-	var comment_str string
+	var commentStr string
 	if comment != "" {
-		comment_str = fmt.Sprintf(" %s \"%s\"", friend_str, comment)
+		commentStr = fmt.Sprintf(" %s \"%s\"", friendStr, comment)
 	} else {
-		comment_str = ""
+		commentStr = ""
 	}
 
 	return fmt.Sprintf(
 		"info nps %6d nodes %6d pv %-17s | %s [%d] | .       %s |       | %4s |%s",
 		nps,
-		self.nodes,
-		self.pv(pos),
-		friend_str,
+		search.nodes,
+		search.pv(pos),
+		friendStr,
 		addr,
 		height,
 		result,
-		comment_str,
+		commentStr,
 	)
 }
 
 // 後ろ向き探索のときの表示だぜ☆（＾～＾）
-func (self *Search) info_backward(
+func (search *Search) infoBackward(
 	nps uint64,
 	pos *Position,
 	addr uint8,
 	result GameResult,
 	comment string,
 ) string {
-	var friend_str string
-	if pos.friend == self.start_friend {
-		friend_str = "+"
+	var friendStr string
+	if pos.friend == search.startFriend {
+		friendStr = "+"
 	} else {
-		friend_str = "-"
+		friendStr = "-"
 	}
 
 	var height string
-	if SQUARES_NUM < pos.pieces_num+1 {
+	if SquaresNum < pos.piecesNum+1 {
 		height = "none    "
 	} else {
-		height = fmt.Sprintf("height %d", pos.pieces_num+1)
+		height = fmt.Sprintf("height %d", pos.piecesNum+1)
 	}
 
-	var comment_str string
+	var commentStr string
 	if comment != "" {
-		comment_str = fmt.Sprintf(" %s \"%s\"", friend_str, comment)
+		commentStr = fmt.Sprintf(" %s \"%s\"", friendStr, comment)
 	} else {
-		comment_str = ""
+		commentStr = ""
 	}
 
 	return fmt.Sprintf(
 		"info nps %6d nodes %6d pv %-17s |       | <- from %s | %s [%d] | %4s |%s",
 		nps,
-		self.nodes,
-		self.pv(pos),
+		search.nodes,
+		search.pv(pos),
 		height,
-		friend_str,
+		friendStr,
 		addr,
 		result,
-		comment_str)
+		commentStr)
 }
