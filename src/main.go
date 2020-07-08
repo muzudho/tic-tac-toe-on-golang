@@ -7,6 +7,7 @@ import (
 func main() {
 	// しょっぱなにプログラムが壊れてないかテストしているぜ☆（＾～＾）
 	// こんなとこに書かない方がいいが、テストを毎回するのが めんどくさいんで 実行するたびにテストさせているぜ☆（＾～＾）
+	// Step 1.
 	log := newLog("test.log")
 	// ほんとは logrotateライブラリ使うのがいいんだが、お前らにはまだ早いしな☆ｍ９（＾～＾）！
 	log.writeln("これはすぐあとにクリアーされるぜ☆（＾～＾）")
@@ -15,6 +16,7 @@ func main() {
 	log.println("こんにちわ、世界！！")
 	// こんにちわ、世界！！
 
+	// Step 2.
 	log.println(fmt.Sprintf("Nought=|%s|", PieceNought))
 	// Nought=|o|
 	log.println(fmt.Sprintf("Cross =|%s|", PieceCross))
@@ -53,6 +55,7 @@ func main() {
 	log.println(search.infoBackward(789, pos, 1, GameResultWin, "Hello!"))
 	// info nps      0 nodes      0 pv                   |       | <- from height 0 | + [1] | win  | + "Hello!"
 
+	// Step 3.
 	pos.doMove(1)
 	log.println(pos.pos())
 	// [Next 2 move(s) | Go x]
@@ -77,6 +80,7 @@ func main() {
 	//         +---+---+---+
 	log.println(fmt.Sprintf("opponent=%s", pos.opponent()))
 
+	// Step 4.
 	p := newCommandLineParser("Go to the Moon!")
 	log.println(fmt.Sprintf("Go to   =|%t|", p.startsWith("Go to")))
 	// Go to   =|True|
@@ -91,6 +95,59 @@ func main() {
 	// p.starts=|5|
 	log.println(fmt.Sprintf("p.rest  =|%s|", p.rest()))
 	// p.rest  =| the Moon!|
+
+	// Step 5.
+	log.println(fmt.Sprintf("xfen=|%s|", pos.toXfen()))
+	// xfen=|xfen 3/3/3 o|
+	pos.do("2", *log)
+	log.println(pos.pos())
+	// [Next 2 move(s) | Go x]
+	//
+	// +---+---+---+
+	// |   |   |   | マスを選んでください。例 `do 7`
+	// +---+---+---+
+	// |   |   |   |    7 8 9
+	// +---+---+---+    4 5 6
+	// |   | o |   |    1 2 3
+	// +---+---+---+
+	xfen := "xfen xo1/xox/oxo o"
+	pos = positionFromXfen(xfen, *log)
+	log.println(pos.pos())
+	// [Next 9 move(s) | Go o]
+	//
+	// +---+---+---+
+	// | x | o |   | マスを選んでください。例 `do 7`
+	// +---+---+---+
+	// | x | o | x |    7 8 9
+	// +---+---+---+    4 5 6
+	// | o | x | o |    1 2 3
+	// +---+---+---+
+	xfen = "xfen 3/3/3 x moves 1 7 4 8 9 3 6 2 5"
+	pos = positionFromXfen(xfen, *log)
+	log.println(pos.pos())
+	// win x
+	// [Next 10 move(s) | Go o]
+	//
+	// +---+---+---+
+	// | o | o | x | マスを選んでください。例 `do 7`
+	// +---+---+---+
+	// | x | x | x |    7 8 9
+	// +---+---+---+    4 5 6
+	// | x | o | o |    1 2 3
+	// +---+---+---+
+	pos.undo()
+	log.println(pos.pos())
+	// [Next 9 move(s) | Go x]
+	//
+	// +---+---+---+
+	// | o | o | x | マスを選んでください。例 `do 7`
+	// +---+---+---+
+	// | x |   | x |    7 8 9
+	// +---+---+---+    4 5 6
+	// | x | o | o |    1 2 3
+	// +---+---+---+
+
+	// Step 6.
 
 	/*
 		// TODO 標準入力の練習☆（＾～＾）

@@ -71,7 +71,7 @@ func (pos *Position) toXfen() string {
 }
 
 // xfen を board に変換するぜ☆（＾～＾）
-func fromXfen(xfen string, log Log) *Position {
+func positionFromXfen(xfen string, log Log) *Position {
 	if !strings.HasPrefix(xfen, "xfen ") {
 		return nil
 	}
