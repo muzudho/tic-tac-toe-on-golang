@@ -12,6 +12,11 @@ Golang は Visual Studio Code に向いてないからな☆ｍ９（＾～＾�
 [Downloads](https://golang.org/dl/)
 [VSCodeでGo言語の開発環境を構築する](https://qiita.com/melty_go/items/c977ba594efcffc8b567)
 
+```shell
+cd src
+go get github.com/jinzhu/copier
+```
+
 ## Run
 
 ソース・ファイルが１つのときは、  
@@ -39,7 +44,7 @@ src
 During development, you may need to reproduce the behavior of your computer.  
 It is difficult to compare the behavior. Instead, it is useful to get the logs and compare the logs.  
 
-* [x] 'log.go' (You can code in 30 minutes)
+* [x] Step 1. 'log.go' (You can code in 30 minutes)
   * [x] Writeln - Write to a file.
   * [x] Clear - Log to empty.
   * [x] Println - Write and display.
@@ -47,7 +52,7 @@ It is difficult to compare the behavior. Instead, it is useful to get the logs a
 The first thing you have to create is your motive.  
 It is important to start with the appearance.  
 
-* [x] 'look_and_model.go' (You can code in 4 hours)
+* [x] Step 2. 'look_and_model.go' (You can code in 4 hours)
   * [x] Piece - "O", "X".
   * [x] Game result - Win/Draw/Lose.
   * [x] Position - It's the board.
@@ -56,14 +61,14 @@ It is important to start with the appearance.
 If you want to play immediately, you have the talent of a game creator.  
 Being able to control your position means being able to play.  
 
-* [x] 'position.go' (You can code in 15 minutes)
+* [x] Step 3. 'position.go' (You can code in 15 minutes)
   * [x] doMove
   * [x] undoMove
   * [x] opponent
 
 Let's enter commands into the computer. Create a command line parser.  
 
-* [x] 'command_line_parser.go' (You can code in 40 minutes)
+* [x] Step 4. 'command_line_parser.go' (You can code in 40 minutes)
   * [x] Input.
   * [x] Starts with.
   * [x] Go next to.
@@ -72,7 +77,7 @@ Let's enter commands into the computer. Create a command line parser.
 People who are looking for something 10 minutes a day are looking for something for a week in a year.  
 Before creating the game itself, let's first create the replay function. Let's get it for a week.  
 
-* [ ] 'uxi_protocol.go' (You can code in 1.5 hours)
+* [ ] Step 5. 'uxi_protocol.go' (You can code in 1.5 hours)
   * [ ] To XFEN.
   * [ ] Do. (Before 'From XFEN') Excludes legal moves and winning/losing decisions.
   * [ ] From XFEN.
@@ -80,7 +85,7 @@ Before creating the game itself, let's first create the replay function. Let's g
 
 Let's make a principal command.  
 
-* [ ] 'main.go' (You can code in 1 hours)
+* [ ] Step 6. 'main.go' (You can code in 1 hours)
   * [ ] position.
   * [ ] pos.
   * [ ] do.
@@ -90,7 +95,7 @@ Let's make a principal command.
 
 Before you make a computer player, let's judge the outcome. And let's test.  
 
-* [ ] 'win_lose_judgment.go' (You can code in 15 minutes)
+* [ ] Step 7. 'win_lose_judgment.go' (You can code in 15 minutes)
   * [ ] Win.
   * [ ] Draw - Not win, not lose, can not play.
   * [ ] Lose. - Not win is lose.
@@ -99,13 +104,13 @@ Before you make a computer player, let's judge the outcome. And let's test.
 
 Before creating a computer player, let's create a mechanism to measure performance.  
 
-* [ ] 'performance_measurement.go' (You can code in 15 minutes)
+* [ ] Step 8. 'performance_measurement.go' (You can code in 15 minutes)
   * [ ] Seconds. - Stopwatch.
   * [ ] Node per second.
 
 Finally, let's make a computer player. (You can code in 1.5 hours)  
 
-* [ ] 'computer_player.go'
+* [ ] Step 9. 'computer_player.go'
   * [ ] Search.
   * [ ] Evaluation. - None.
 * [ ] 'main.go'
