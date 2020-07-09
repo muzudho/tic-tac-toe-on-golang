@@ -148,6 +148,22 @@ func main() {
 	// +---+---+---+
 
 	// Step 6.
+	// Step 7.
+	xfen = "xfen o2/xox/oxo x"
+
+	pos = positionFromXfen(xfen, *log)
+	if pos == nil {
+		panic(fmt.Sprintf("Invalid xfen=|%s|", xfen))
+	}
+	log.println(fmt.Sprintf("win=|%t|", pos.isOpponentWin()))
+	// win=|True|
+	xfen = "xfen xox/oxo/oxo x"
+	pos = positionFromXfen(xfen, *log)
+	if pos == nil {
+		panic(fmt.Sprintf("Invalid xfen=|%s|", xfen))
+	}
+	log.println(fmt.Sprintf("draw=|%t|", pos.isDraw()))
+	// draw=|True|
 
 	/*
 		// TODO 標準入力の練習☆（＾～＾）
