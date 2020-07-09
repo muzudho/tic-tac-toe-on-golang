@@ -100,7 +100,7 @@ func main() {
 	// Step 5.
 	log.println(fmt.Sprintf("xfen=|%s|", pos.toXfen()))
 	// xfen=|xfen 3/3/3 o|
-	pos.do("2", *log)
+	pos.do("2", log)
 	log.println(pos.pos())
 	// [Next 2 move(s) | Go x]
 	//
@@ -112,7 +112,7 @@ func main() {
 	// |   | o |   |    1 2 3
 	// +---+---+---+
 	xfen := "xfen xo1/xox/oxo o"
-	pos = positionFromXfen(xfen, *log)
+	pos = positionFromXfen(xfen, log)
 	log.println(pos.pos())
 	// [Next 9 move(s) | Go o]
 	//
@@ -124,7 +124,7 @@ func main() {
 	// | o | x | o |    1 2 3
 	// +---+---+---+
 	xfen = "xfen 3/3/3 x moves 1 7 4 8 9 3 6 2 5"
-	pos = positionFromXfen(xfen, *log)
+	pos = positionFromXfen(xfen, log)
 	log.println(pos.pos())
 	// win x
 	// [Next 10 move(s) | Go o]
@@ -152,14 +152,14 @@ func main() {
 	// Step 7.
 	xfen = "xfen o2/xox/oxo x"
 
-	pos = positionFromXfen(xfen, *log)
+	pos = positionFromXfen(xfen, log)
 	if pos == nil {
 		panic(fmt.Sprintf("Invalid xfen=|%s|", xfen))
 	}
 	log.println(fmt.Sprintf("win=|%t|", pos.isOpponentWin()))
 	// win=|True|
 	xfen = "xfen xox/oxo/oxo x"
-	pos = positionFromXfen(xfen, *log)
+	pos = positionFromXfen(xfen, log)
 	if pos == nil {
 		panic(fmt.Sprintf("Invalid xfen=|%s|", xfen))
 	}
@@ -175,6 +175,46 @@ func main() {
 	// sec  =1.0
 	log.println(fmt.Sprintf("nps  =%d", search.nps()))
 	// nps  =0.0
+
+	// Step 9.
+	xfen = "xfen 3/3/3 o moves 1 5 2 3 7 4"
+	pos = positionFromXfen(xfen, log)
+	if pos == nil {
+		panic(fmt.Sprintf("Invalid xfen=|%s|", xfen))
+	}
+	search = newSearch(pos.friend, pos.piecesNum, true)
+	addr, result := search.goIt(pos, log)
+	// info nps ...... nodes ...... pv O X O X O X O X O
+	// info nps      1 nodes      1 pv 6                 | - [6] | ->   to height 8 |       |      | - "Search."
+	// info nps      2 nodes      2 pv 6 8               | + [8] | ->   to height 9 |       |      | + "Search."
+	// info nps      3 nodes      3 pv 6 8 9             | - [9] | .       height 9 |       | draw | - "It's ok."
+	// info nps      3 nodes      3 pv 6 8               |       | <- from height 8 | + [9] | draw |
+	// info nps      3 nodes      3 pv 6                 |       | <- from height 7 | - [8] | draw | - "Fmmm."
+	// info nps      4 nodes      4 pv 6 9               | + [9] | ->   to height 9 |       |      | + "Search."
+	// info nps      5 nodes      5 pv 6 9 8             | - [8] | .       height 9 |       | draw | - "It's ok."
+	// info nps      5 nodes      5 pv 6 9               |       | <- from height 8 | + [8] | draw |
+	// info nps      5 nodes      5 pv 6                 |       | <- from height 7 | - [9] | draw | - "Fmmm."
+	// info nps      5 nodes      5 pv                   |       | <- from height 6 | + [6] | draw | + "Fmmm."
+	// info nps      6 nodes      6 pv 8                 | - [8] | ->   to height 8 |       |      | - "Search."
+	// info nps      7 nodes      7 pv 8 6               | + [6] | .       height 8 |       | win  | + "Hooray!"
+	// info nps      7 nodes      7 pv 8                 |       | <- from height 7 | - [6] | win  |
+	// info nps      7 nodes      7 pv                   |       | <- from height 6 | + [8] | lose | + "Resign."
+	// info nps      8 nodes      8 pv 9                 | - [9] | ->   to height 8 |       |      | - "Search."
+	// info nps      9 nodes      9 pv 9 6               | + [6] | .       height 8 |       | win  | + "Hooray!"
+	// info nps      9 nodes      9 pv 9                 |       | <- from height 7 | - [6] | win  |
+	// info nps      9 nodes      9 pv                   |       | <- from height 6 | + [9] | lose | + "Resign."
+	log.println(fmt.Sprintf("result=|%s|", result))
+	// result=|draw|
+	var bestmove string
+	if addr == 0 {
+		bestmove = "resign"
+	} else {
+		bestmove = fmt.Sprintf("%d", addr)
+	}
+	log.println(fmt.Sprintf("bestmove=|%s|", bestmove))
+	// bestmove=|6|
+
+	// End.
 
 	/*
 		// TODO 標準入力の練習☆（＾～＾）

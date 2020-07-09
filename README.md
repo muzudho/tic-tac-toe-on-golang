@@ -98,7 +98,7 @@ Before you make a computer player, let's judge the outcome. And let's test.
 * [x] Step 7. 'win_lose_judgment.go' (You can code in 15 minutes)
   * [x] Win.
   * [x] Draw - Not win, not lose, can not play.
-  * [x] Lose. - Not win is lose.
+  * [ ] Lose. - Not win is lose.
 * [x] 'uxi_protocol.go' (You can code in 1.5 hours)
   * [x] Do. Winning/losing decisions.
 
@@ -110,8 +110,8 @@ Before creating a computer player, let's create a mechanism to measure performan
 
 Finally, let's make a computer player. (You can code in 1.5 hours)  
 
-* [ ] Step 9. 'computer_player.go'
-  * [ ] Search.
+* [x] Step 9. 'computer_player.go'
+  * [x] Search.
   * [ ] Evaluation. - None.
-* [ ] 'main.go'
-  * [ ] Create "go" command.
+* [x] 'main.go'
+  * [x] Create "go" command.

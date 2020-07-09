@@ -71,7 +71,7 @@ func (pos *Position) toXfen() string {
 }
 
 // xfen を board に変換するぜ☆（＾～＾）
-func positionFromXfen(xfen string, log Log) *Position {
+func positionFromXfen(xfen string, log *Log) *Position {
 	if !strings.HasPrefix(xfen, "xfen ") {
 		return nil
 	}
@@ -177,7 +177,7 @@ func positionFromXfen(xfen string, log Log) *Position {
 // # Arguments
 //
 // * `argStr` - コマンドラインの残り。ここでは駒を置く場所。 `1` とか `7` など。
-func (pos *Position) do(argStr string, log Log) {
+func (pos *Position) do(argStr string, log *Log) {
 	addr, err := strconv.Atoi(argStr)
 	if err != nil {
 		log.println(fmt.Sprintf(
