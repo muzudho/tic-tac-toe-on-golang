@@ -85,28 +85,28 @@ Before creating the game itself, let's first create the replay function. Let's g
 
 Let's make a principal command.  
 
-* [ ] Step 6. 'main.go' (You can code in 1 hours)
-  * [ ] position.
-  * [ ] pos.
-  * [ ] do.
-  * [ ] undo.
-  * [ ] uxi tic-tac-toe
-  * [ ] xfen.
+* [x] Step 6. 'main.go' (You can code in 1 hours)
+  * [x] position.
+  * [x] pos.
+  * [x] do.
+  * [x] undo.
+  * [x] uxi tic-tac-toe
+  * [x] xfen.
 
 Before you make a computer player, let's judge the outcome. And let's test.  
 
-* [ ] Step 7. 'win_lose_judgment.go' (You can code in 15 minutes)
-  * [ ] Win.
-  * [ ] Draw - Not win, not lose, can not play.
-  * [ ] Lose. - Not win is lose.
-* [ ] 'uxi_protocol.go' (You can code in 1.5 hours)
-  * [ ] Do. Winning/losing decisions.
+* [x] Step 7. 'win_lose_judgment.go' (You can code in 15 minutes)
+  * [x] Win.
+  * [x] Draw - Not win, not lose, can not play.
+  * [x] Lose. - Not win is lose.
+* [x] 'uxi_protocol.go' (You can code in 1.5 hours)
+  * [x] Do. Winning/losing decisions.
 
 Before creating a computer player, let's create a mechanism to measure performance.  
 
-* [ ] Step 8. 'performance_measurement.go' (You can code in 15 minutes)
-  * [ ] Seconds. - Stopwatch.
-  * [ ] Node per second.
+* [x] Step 8. 'performance_measurement.go' (You can code in 15 minutes)
+  * [x] Seconds. - Stopwatch.
+  * [x] Node per second.
 
 Finally, let's make a computer player. (You can code in 1.5 hours)  
 

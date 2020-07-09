@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 )
 
 func main() {
@@ -164,6 +165,16 @@ func main() {
 	}
 	log.println(fmt.Sprintf("draw=|%t|", pos.isDraw()))
 	// draw=|True|
+
+	// Step 8.
+	// 探索してないんだから、 nodes も nps も 0 になるはずだよな☆（＾～＾）
+	time.Sleep(time.Second * 1)
+	log.println(fmt.Sprintf("nodes=%d", search.nodes))
+	// nodes=0
+	log.println(fmt.Sprintf("sec  =%d", search.sec()))
+	// sec  =1.0
+	log.println(fmt.Sprintf("nps  =%d", search.nps()))
+	// nps  =0.0
 
 	/*
 		// TODO 標準入力の練習☆（＾～＾）
