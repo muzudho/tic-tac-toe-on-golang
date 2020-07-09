@@ -7,7 +7,7 @@
 
 ## Kitting
 
-Golang は Visual Studio Code に向いてないからな☆ｍ９（＾～＾） 他の適当なターミナルで実行しろだぜ☆（＾～＾）  
+Golang は build して .exe ファイルを叩けだぜ☆ｍ９（＾～＾） `go run` はファイル１個で実行するときにしとけだぜ☆ｍ９（＾～＾）  
 
 [Downloads](https://golang.org/dl/)
 [VSCodeでGo言語の開発環境を構築する](https://qiita.com/melty_go/items/c977ba594efcffc8b567)
