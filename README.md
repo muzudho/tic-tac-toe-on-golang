@@ -2,8 +2,10 @@
 
 ○×ゲームだぜ☆（＾～＾）
 
-* [Python ver](https://github.com/muzudho/tic-tac-toe-on-python)
-* [Rust ver](https://github.com/muzudho/tic-tac-toe)
+* [プログラミング入門動画](https://www.youtube.com/playlist?list=PLllMJuAE0iK6kSsi96OBXBgNZHFg7KB9f) - 小学生は変女に Scratch でも教えられてろだぜ☆（＾～＾）
+* 他のプログラム言語で○×ゲーム
+  * [Python ver](https://github.com/muzudho/tic-tac-toe-on-python)
+  * [Rust ver](https://github.com/muzudho/tic-tac-toe)
 
 ## Kitting
 
