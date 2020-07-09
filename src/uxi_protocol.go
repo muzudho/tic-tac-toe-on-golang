@@ -17,15 +17,15 @@ func (pos *Position) toXfen() string {
 	spaces := 0
 	addresses := [...]uint8{7, 8, 9, 4, 5, 6, 1, 2, 3}
 	for _, addr := range addresses {
-		pPiece := pos.startingBoard[addr]
-		if pPiece == nil {
+		piece := pos.startingBoard[addr]
+		if piece == PieceNone {
 			spaces++
 		} else {
 			if 0 < spaces {
 				xfen += strconv.Itoa(spaces)
 				spaces = 0
 			}
-			switch *pPiece {
+			switch piece {
 			case PieceNought:
 				xfen += "o"
 			case PieceCross:
@@ -113,13 +113,11 @@ func positionFromXfen(xfen string, log *Log) *Position {
 			switch ch {
 			case 'x':
 				// 手番の順ではないので、手番は分からないぜ☆（＾～＾）
-				temp := PieceCross
-				pos.startingBoard[addr] = &temp
+				pos.startingBoard[addr] = PieceCross
 				pos.piecesNum++
 				addr++
 			case 'o':
-				temp := PieceNought
-				pos.startingBoard[addr] = &temp
+				pos.startingBoard[addr] = PieceNought
 				pos.piecesNum++
 				addr++
 			case '1':
@@ -193,7 +191,7 @@ func (pos *Position) do(argStr string, log *Log) {
 			"Error   | 1～9 で指定してくれだぜ☆（＾～＾） 番地=%d",
 			addr))
 		return
-	} else if pos.board[addr] != nil {
+	} else if pos.board[addr] != PieceNone {
 		log.println(fmt.Sprintf(
 			"Error   | 移動先のマスに駒があってはダメだぜ☆（＾～＾） 番地=%d",
 			addr))

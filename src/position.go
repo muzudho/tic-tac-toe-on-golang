@@ -5,7 +5,7 @@ import "fmt"
 // １手指すぜ☆（＾～＾）
 func (pos *Position) doMove(addr uint8) {
 	// 石を置くぜ☆（＾～＾）
-	pos.board[addr] = &pos.friend
+	pos.board[addr] = pos.friend
 	// 棋譜に記すぜ☆（＾～＾）
 	pos.history[pos.piecesNum] = addr
 	// 棋譜に記した後にカウンターを増やすぜ☆（＾～＾）
@@ -22,7 +22,7 @@ func (pos *Position) undoMove() {
 	pos.piecesNum--
 	// 置いたところの石は削除な☆（＾～＾）
 	addr := pos.history[pos.piecesNum]
-	pos.board[addr] = nil
+	pos.board[addr] = PieceNone
 }
 
 // 相手番☆（＾～＾）

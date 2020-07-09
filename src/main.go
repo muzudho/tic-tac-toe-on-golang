@@ -237,7 +237,7 @@ func main() {
 	pos = newPosition()
 	infoEnable := true
 
-	// [Ctrl]+[C] でループを終了
+	// [Ctrl]+[C] でループを終了。ログ・ファイルを閉じないのが気になるが……☆（＾～＾）
 	for {
 		line := ""
 		// まず最初に、コマンドライン入力を待機しろだぜ☆（＾～＾）
@@ -270,6 +270,9 @@ func main() {
 			infoEnable = false
 		} else if p.startsWith("info-on") {
 			infoEnable = true
+		} else if p.startsWith("quit") {
+			log.close()
+			return
 		} else if p.startsWith("position") {
 			p.goNextTo("position ")
 			rest := p.rest()

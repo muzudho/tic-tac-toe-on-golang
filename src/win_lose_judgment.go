@@ -7,8 +7,9 @@ package main
 func (pos *Position) isOpponentWin() bool {
 	// 8パターンしかないので、全部チェックしてしまおうぜ☆（＾～＾）
 
-	equals := func(expected Piece, actual *Piece) bool {
-		return actual != nil && expected == *actual
+	equals := func(expected Piece, actual Piece) bool {
+		// expected が PieceNone であることは無いぜ☆（＾～＾） `actual != PieceNone` は要らないぜ☆（＾～＾）
+		return expected == actual
 	}
 
 	opponent := pos.opponent()
@@ -55,7 +56,7 @@ func (pos *Position) isDraw() bool {
 		return false
 	}
 	for addr := 1; addr < int(BoardLen); addr++ {
-		if pos.board[addr] == nil {
+		if pos.board[addr] == PieceNone {
 			return false
 		}
 	}

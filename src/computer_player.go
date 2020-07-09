@@ -20,7 +20,7 @@ func (search *Search) node(pos *Position, log *Log) (uint8, GameResult) {
 	var addr uint8
 	for addr = 1; addr < BoardLen; addr++ {
 		// 空きマスがあれば
-		if pos.board[addr] == nil {
+		if pos.board[addr] == PieceNone {
 			// とりあえず置いてみようぜ☆（＾～＾）
 			pos.doMove(addr)
 			search.nodes++

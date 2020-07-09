@@ -10,18 +10,21 @@ import (
 type Piece int
 
 const (
+	// PieceNone is empty square.
+	PieceNone Piece = 0 + iota
 	// PieceNought 〇
-	PieceNought Piece = 1 + iota
+	PieceNought
 	// PieceCross ×
 	PieceCross
 )
 
 var pieces = [...]string{
+	" ",
 	"o",
 	"x",
 }
 
-func (piece Piece) String() string { return pieces[piece-1] }
+func (piece Piece) String() string { return pieces[piece] }
 
 // GameResult 〇×ゲームは完全解析できるから、評価ではなくて、ゲームの結果が分かるんだよな☆（＾～＾）
 type GameResult int
@@ -58,12 +61,12 @@ type Position struct {
 	friend Piece
 
 	// 開始局面の盤の各マス☆（＾～＾） [0] は未使用☆（＾～＾）
-	startingBoard [BoardLen]*Piece
+	startingBoard [BoardLen]Piece
 	// 盤の上に最初から駒が何個置いてあったかだぜ☆（＾～＾）
 	startingPiecesNum uint8
 
 	// 現状の盤の各マス☆（＾～＾） [0] は未使用☆（＾～＾）
-	board [BoardLen]*Piece
+	board [BoardLen]Piece
 
 	// 棋譜だぜ☆（＾～＾）駒を置いた番地を並べてけだぜ☆（＾～＾）
 	history [SquaresNum]uint8
@@ -75,9 +78,9 @@ type Position struct {
 func newPosition() *Position {
 	p := Position{
 		friend:            PieceNought,
-		startingBoard:     [...]*Piece{nil, nil, nil, nil, nil, nil, nil, nil, nil, nil},
+		startingBoard:     [...]Piece{PieceNone, PieceNone, PieceNone, PieceNone, PieceNone, PieceNone, PieceNone, PieceNone, PieceNone, PieceNone},
 		startingPiecesNum: 0,
-		board:             [...]*Piece{nil, nil, nil, nil, nil, nil, nil, nil, nil, nil},
+		board:             [...]Piece{PieceNone, PieceNone, PieceNone, PieceNone, PieceNone, PieceNone, PieceNone, PieceNone, PieceNone, PieceNone},
 		history:           [SquaresNum]uint8{0},
 		piecesNum:         0,
 	}
@@ -85,7 +88,7 @@ func newPosition() *Position {
 }
 
 func (pos *Position) cell(index uint8) string {
-	if pos.board[index] != nil {
+	if pos.board[index] != PieceNone {
 		return fmt.Sprintf(" %s ", pos.board[index])
 	}
 	return "   "
@@ -162,7 +165,7 @@ func (search *Search) pv(pos *Position) string {
 	for i := search.startPiecesNum; i < pos.piecesNum; i++ {
 		pv += fmt.Sprintf("%d ", pos.history[i])
 	}
-	return strings.TrimRight(pv, "")
+	return strings.TrimRight(pv, " ")
 }
 
 // 見出しだぜ☆（＾～＾）
