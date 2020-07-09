@@ -12,11 +12,6 @@ Golang は build して .exe ファイルを叩けだぜ☆ｍ９（＾～＾）
 [Downloads](https://golang.org/dl/)
 [VSCodeでGo言語の開発環境を構築する](https://qiita.com/melty_go/items/c977ba594efcffc8b567)
 
-```shell
-cd src
-go get github.com/jinzhu/copier
-```
-
 ## Run
 
 ソース・ファイルが１つのときは、  
@@ -24,6 +19,7 @@ go get github.com/jinzhu/copier
 Input:  
 
 ```shell
+cd src
 go run main.go
 ```
 
@@ -32,6 +28,7 @@ go run main.go
 Input:  
 
 ```shell
+cd src
 go build
 src
 ```
