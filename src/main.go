@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"time"
 )
 
@@ -216,17 +218,77 @@ func main() {
 
 	// End.
 
-	/*
-		// TODO 標準入力の練習☆（＾～＾）
-		var s string
-		print("スキャンするぜ☆（＾～＾）")
+	// 説明を出そうぜ☆（＾～＾）
+	log.println(`きふわらべの〇×ゲーム
+
+コマンド:
+'do 7'     - 手番のプレイヤーが、 7 番地に印を付けます。
+'go'       - コンピューターが次の1手を示します。
+'info-off' - info出力なし。
+'info-on'  - info出力あり(既定)。
+'pos'      - 局面表示。
+'position xfen 3/3/3 o moves 5 1 2 8 4 6 3 7 9' - 初期局面と棋譜を入力。
+'undo'     - 1手戻します。
+'uxi'      - 'uxiok tic-tac-toe {protocol-version}' を返します。
+'xfen'     - 現局面のxfen文字列表示。
+`)
+
+	// 初期局面
+	pos = newPosition()
+	infoEnable := true
+
+	// [Ctrl]+[C] でループを終了
+	for {
+		line := ""
+		// まず最初に、コマンドライン入力を待機しろだぜ☆（＾～＾）
 		var scanner = bufio.NewScanner(os.Stdin)
 		if scanner.Scan() {
-			print("スキャンしたか☆（＾～＾）？")
-			s = scanner.Text()
+			line = scanner.Text()
 		}
-		print("どうだぜ☆（＾～＾）？")
-		// 文字数を調べようぜ☆（＾～＾）
-		len := utf8.RuneCountInString(s)
-	*/
+
+		// コマンドライン☆（＾～＾） p は parser の意味で使ってるぜ☆（＾～＾）
+		p := newCommandLineParser(line)
+
+		// 本当は よく使うコマンド順に並べた方が高速だが、先に見つけた方が選ばれるので後ろの方を漏らしやすくて むずかしいし、
+		// だから、アルファベット順に並べた方が見やすいぜ☆（＾～＾）
+		if p.startsWith("do") {
+			p.goNextTo("do ")
+			rest := p.rest()
+			if rest != "" {
+				pos.do(rest, log)
+			}
+		} else if p.startsWith("go") {
+			search = newSearch(pos.friend, pos.piecesNum, infoEnable)
+			addr, result = search.goIt(pos, log)
+			if addr == 0 {
+				log.println("resign")
+			} else {
+				log.println(fmt.Sprintf("info result=%s nps=%d", result, search.nps()))
+				log.println(fmt.Sprintf("bestmove %d", addr))
+			}
+		} else if p.startsWith("info-off") {
+			infoEnable = false
+		} else if p.startsWith("info-on") {
+			infoEnable = true
+		} else if p.startsWith("position") {
+			p.goNextTo("position ")
+			rest := p.rest()
+			if rest != "" {
+				temp := positionFromXfen(rest, log)
+				if temp != nil {
+					pos = temp
+				}
+			}
+		} else if p.startsWith("pos") {
+			log.println(pos.pos())
+		} else if p.startsWith("undo") {
+			pos.undo()
+		} else if p.startsWith("uxi") {
+			log.println("uxiok tic-tac-toe v20200704.0.0")
+		} else if p.startsWith("xfen") {
+			log.println(fmt.Sprintf("%s", pos.toXfen()))
+		} else {
+			log.println(fmt.Sprintf("Debug   | Invalid command=|%s|", line))
+		}
+	}
 }
