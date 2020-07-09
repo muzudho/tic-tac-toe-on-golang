@@ -200,19 +200,19 @@ func (pos *Position) do(argStr string, log *Log) {
 
 	pos.doMove(uint8(addr))
 
-	/*
-		// TODO 勝ち負け判定☆（*＾～＾*）
-		// これは PositionHelper, WinLoseJudgment を作ってから実装しろだぜ☆（＾～＾）
-		if self.is_opponent_win() {
-			if let Some(result) = Position::result(GameResult::Win, Some(self.opponent())) {
-				log::println(&result);
-			}
-		} else if self.is_draw() {
-			if let Some(result) = Position::result(GameResult::Draw, None) {
-				log::println(&result);
-			}
+	// 勝ち負け判定☆（*＾～＾*）
+	// これは PositionHelper, WinLoseJudgment を作ってから実装しろだぜ☆（＾～＾）
+	if pos.isOpponentWin() {
+		result := positionResult(GameResultWin, pos.opponent())
+		if result != "" {
+			log.println(result)
 		}
-	*/
+	} else if pos.isDraw() {
+		result := positionResult(GameResultDraw, PieceNone)
+		if result != "" {
+			log.println(result)
+		}
+	}
 }
 
 // 未来の駒を１つ戻す

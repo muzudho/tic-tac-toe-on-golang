@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strings"
 	"unicode/utf8"
 )
 
@@ -16,8 +15,6 @@ type CommandLineParser struct {
 // 末尾の改行を除こうぜ☆（＾～＾）
 // trim すると空白も消えるぜ☆（＾～＾）
 func newCommandLineParser(line string) *CommandLineParser {
-	// TODO これが要るのか分からないが、文字列の末端の改行を削除しようぜ☆（＾～＾）
-	line = strings.TrimRight(line, "\r\n")
 	// 文字数を調べようぜ☆（＾～＾）
 	len := utf8.RuneCountInString(line)
 	return &CommandLineParser{

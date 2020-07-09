@@ -112,3 +112,4 @@ Finally, let's make a computer player. (You can code in 1.5 hours)
   * [ ] Evaluation. - None.
 * [x] 'main.go'
   * [x] Create "go" command.
+* [x] Remeve all 'TODO' tasks. Examples: '// TODO Write a code here.'

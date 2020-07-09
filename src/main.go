@@ -244,6 +244,8 @@ func main() {
 		var scanner = bufio.NewScanner(os.Stdin)
 		if scanner.Scan() {
 			line = scanner.Text()
+			// 文字列の末尾に改行が付いていれば削除しようと思ったら、付いてないらしいんで要らんかった☆（＾～＾）
+			// line = strings.TrimRight(line, "\r\n")
 		}
 
 		// コマンドライン☆（＾～＾） p は parser の意味で使ってるぜ☆（＾～＾）
